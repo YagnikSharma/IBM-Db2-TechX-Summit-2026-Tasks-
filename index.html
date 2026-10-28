@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1f3a" />
+  <meta name="description" content="Interactive operations checklist for IBM Db2 TechX Summit 2026." />
+  <title>IBM Db2 TechX Summit 2026 — Operations Checklist</title>
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --navy-2: #123b69;
+      --blue: #1769d2;
+      --blue-soft: #eaf3ff;
+      --ink: #172b45;
+      --muted: #53657a;
+      --line: #d9e2ec;
+      --paper: #ffffff;
+      --canvas: #f2f6fa;
+      --green: #16804a;
+      --shadow: 0 10px 30px rgba(13, 39, 71, .07);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .hero {
+      background: linear-gradient(120deg, var(--navy) 0%, #10345e 60%, #1769a6 100%);
+      color: white;
+      padding: 32px 22px 27px;
+    }
+    .hero-inner, main, footer { width: min(1180px, calc(100% - 32px)); margin-inline: auto; }
+    .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-weight: 800; font-size: 12px; color: #b9d7f7; }
+    h1 { font-size: clamp(27px, 4vw, 40px); line-height: 1.12; margin: 8px 0 10px; letter-spacing: -.035em; }
+    .subhead { margin: 0; color: #e3edf8; font-size: 16px; }
+    .deadline {
+      display: inline-flex; align-items: center; gap: 9px; margin-top: 18px;
+      border: 1px solid rgba(255,255,255,.26); background: rgba(255,255,255,.09);
+      border-radius: 999px; padding: 8px 13px; font-weight: 700; font-size: 14px;
+    }
+    main { padding: 24px 0 44px; }
+    .topbar { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+    .progress-card, .panel, .quick-card, .detail-section, .resources-card {
+      background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow);
+    }
+    .progress-card { padding: 14px 16px; flex: 1 1 360px; }
+    .progress-top { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; font-weight: 800; margin-bottom: 9px; }
+    .progress-track { height: 10px; overflow: hidden; background: #e7edf4; border-radius: 99px; }
+    .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #1769d2, #29a16b); border-radius: inherit; transition: width .2s ease; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn { border: 1px solid #c9d5e3; background: white; color: var(--ink); border-radius: 10px; padding: 10px 13px; font-weight: 750; font-size: 14px; }
+    .btn.primary { color: white; background: var(--blue); border-color: var(--blue); }
+    .btn:hover { filter: brightness(.97); }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin: 25px 2px 12px; }
+    h2 { margin: 0; font-size: clamp(21px, 2.3vw, 27px); letter-spacing: -.025em; }
+    .section-heading p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+    .quick-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .quick-card { padding: 16px 16px 10px; box-shadow: none; }
+    .quick-card h3 { font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: #33506f; margin: 0 0 11px; }
+    .quick-item { display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; padding: 8px 0; border-top: 1px solid #edf1f5; font-size: 14px; line-height: 1.35; }
+    .quick-item:first-of-type { border-top: 0; }
+    input[type="checkbox"] { width: 19px; height: 19px; accent-color: var(--blue); cursor: pointer; margin: 1px 0 0; flex: 0 0 auto; }
+    .quick-item label, .task-title label { cursor: pointer; }
+    .quick-item.done label { color: #728094; text-decoration: line-through; }
+    .status-tag { display: inline-block; background: var(--blue-soft); color: #18539c; border-radius: 6px; padding: 2px 6px; font-size: 11px; font-weight: 800; margin-left: 5px; vertical-align: 1px; }
+    .detail-controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+    .search { min-width: 220px; flex: 1; border: 1px solid #cbd7e4; background: white; border-radius: 10px; padding: 11px 13px; color: var(--ink); }
+    .detail-sections { display: grid; gap: 12px; }
+    .detail-section { overflow: hidden; box-shadow: none; }
+    .detail-section summary { list-style: none; cursor: pointer; padding: 17px 18px; display: flex; gap: 12px; align-items: center; justify-content: space-between; font-weight: 850; font-size: 18px; }
+    .detail-section summary::-webkit-details-marker { display: none; }
+    .summary-left { display: flex; align-items: center; gap: 11px; }
+    .section-number { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--blue-soft); color: #165bb5; font-size: 14px; }
+    .summary-meta { color: var(--muted); font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .detail-body { padding: 0 18px 16px; border-top: 1px solid #edf1f5; }
+    .task { padding: 16px 0 14px; border-bottom: 1px solid #edf1f5; }
+    .task:last-child { border-bottom: 0; }
+    .task-head { display: flex; align-items: start; gap: 11px; }
+    .task-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 850; font-size: 17px; line-height: 1.35; }
+    .task.done .task-title { color: #6b7e91; text-decoration: line-through; }
+    .owner { font-size: 12px; font-weight: 800; color: #3d5f80; background: #edf4fb; padding: 3px 8px; border-radius: 99px; margin-top: 5px; display: inline-block; }
+    .description { margin: 8px 0 0 30px; font-size: 15px; color: #3e5268; max-width: 900px; }
+    .task-links { display: flex; gap: 8px; flex-wrap: wrap; margin: 9px 0 0 30px; }
+    a { color: #145eb8; text-decoration: none; font-weight: 750; }
+    a:hover { text-decoration: underline; }
+    .link-pill { display: inline-block; border: 1px solid #d6e2ef; border-radius: 8px; padding: 6px 9px; font-size: 13px; background: #f8fbff; }
+    .resources-card { padding: 18px; margin-top: 18px; box-shadow: none; }
+    .resources-card h2 { font-size: 21px; margin-bottom: 10px; }
+    .resource-links { display: flex; gap: 9px; flex-wrap: wrap; }
+    .resource-links a { display: inline-block; padding: 10px 12px; border: 1px solid #d6e2ef; border-radius: 10px; background: #f8fbff; font-size: 14px; }
+    .guest-list { margin: 14px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 18px; }
+    .guest-list a { font-size: 14px; }
+    .note { background: #fff8e7; border: 1px solid #f0dca6; color: #6e5111; border-radius: 11px; padding: 12px 14px; font-size: 14px; margin-top: 14px; }
+    footer { padding: 0 0 28px; font-size: 13px; color: var(--muted); }
+    .empty-state { color: var(--muted); padding: 20px; text-align: center; display: none; }
+    @media (max-width: 900px) { .quick-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 620px) {
+      .hero { padding: 25px 17px 22px; }
+      .hero-inner, main, footer { width: min(100% - 22px, 1180px); }
+      .quick-grid { grid-template-columns: 1fr; }
+      .topbar { align-items: stretch; }
+      .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .btn { padding: 10px 8px; }
+      .detail-section summary { padding: 15px 13px; font-size: 16px; }
+      .detail-body { padding: 0 13px 12px; }
+      .description, .task-links { margin-left: 0; }
+      .guest-list { grid-template-columns: 1fr; }
+    }
+    @media print {
+      @page { size: A4; margin: 9mm; }
+      body { background: white; font-size: 10pt; color: #111; }
+      .hero { padding: 0 0 8px; color: #111; background: white; border-bottom: 2px solid #173b63; }
+      .hero-inner, main, footer { width: 100%; }
+      .eyebrow, .subhead { color: #333; }
+      h1 { color: #111; font-size: 20pt; margin: 4px 0; }
+      .deadline { color: #111; background: white; border: 1px solid #777; margin-top: 6px; font-size: 9pt; }
+      .topbar, .section-heading, #detail-area, #resources-area, footer, .no-print { display: none !important; }
+      main { padding: 8px 0 0; }
+      #quick-area .section-heading { display: block !important; margin: 0 0 6px; }
+      #quick-area .section-heading p { font-size: 9pt; }
+      .quick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+      .quick-card { padding: 6px 7px 4px; border: 1px solid #d0d7df; border-radius: 6px; box-shadow: none; break-inside: avoid; }
+      .quick-card h3 { font-size: 8pt; color: #111; margin-bottom: 4px; }
+      .quick-item { grid-template-columns: 14px 1fr; gap: 5px; padding: 3px 0; font-size: 8pt; line-height: 1.2; }
+      input[type="checkbox"] { width: 12px; height: 12px; }
+      .status-tag { display: none; }
+      a { color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Operations checklist</div>
+      <h1>IBM Db2 TechX Summit 2026</h1>
+      <p class="subhead">A practical checklist for the summit and Db2 Hack Challenge team.</p>
+      <div class="deadline">⚑ Public hackathon deadline: 29 October, 7:00 PM IST — unchanged unless an extension is approved</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="topbar">
+      <div class="progress-card" aria-live="polite">
+        <div class="progress-top"><span>Overall progress</span><span id="progress-label">0 / 43 tasks · 0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <div class="actions no-print">
+        <button class="btn primary" onclick="window.print()">Print quick checklist</button>
+        <button class="btn" id="export-btn">Export progress</button>
+        <button class="btn" id="reset-btn">Reset checkboxes</button>
+      </div>
+    </div>
+
+    <section id="quick-area">
+      <div class="section-heading">
+        <div><h2>Quick checklist</h2><p>Tick off the short task names here. Use the details below only when needed.</p></div>
+      </div>
+      <div class="quick-grid" id="quick-grid"></div>
+    </section>
+
+    <section id="detail-area">
+      <div class="section-heading">
+        <div><h2>Task details</h2><p>Owners and short instructions for coordinators.</p></div>
+      </div>
+      <div class="detail-controls no-print">
+        <input id="search" class="search" type="search" placeholder="Search tasks or coordinators…" aria-label="Search tasks or coordinators" />
+        <button class="btn" id="expand-all">Expand all</button>
+        <button class="btn" id="collapse-all">Collapse all</button>
+      </div>
+      <div class="detail-sections" id="detail-sections"></div>
+      <div class="empty-state" id="empty-state">No matching tasks. Try a shorter search.</div>
+    </section>
+
+    <section id="resources-area" class="resources-card">
+      <h2>Event links & guest directory</h2>
+      <div class="resource-links">
+        <a href="https://luma.com/68jmineh" target="_blank" rel="noreferrer">Luma event ↗</a>
+        <a href="https://github.com/KunalGolaIBM/IBM_Db2_TechX_Project_Submission/pulls" target="_blank" rel="noreferrer">GitHub PRs ↗</a>
+        <a href="https://ibmdb2techxsummit.glbajajgroup.ac.in/" target="_blank" rel="noreferrer">Official event website ↗</a>
+        <a href="https://livepoll.io/" target="_blank" rel="noreferrer">Quiz platform to test ↗</a>
+      </div>
+      <div class="guest-list">
+        <a href="https://www.linkedin.com/in/2mrdaya/" target="_blank" rel="noreferrer">Daya Nand — LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/pawanthakurindia/" target="_blank" rel="noreferrer">Pawan Thakur — LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/kunal-gola-459030203/" target="_blank" rel="noreferrer">Kunal Gola — LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/keshav-maheshwari-666738186/" target="_blank" rel="noreferrer">Keshav Maheshwari — LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/dhruvinsights/" target="_blank" rel="noreferrer">Dhruv Chaturvedi — LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/gaurav-saxena-95044594/" target="_blank" rel="noreferrer">Gaurav Saxena — LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/shaik-sadiq-068a39242/" target="_blank" rel="noreferrer">Shaik Sadiq — LinkedIn ↗</a>
+      </div>
+      <div class="note"><strong>Checkbox note:</strong> Progress saves in this browser on this device. It does not automatically synchronize between different coordinators or devices.</div>
+    </section>
+  </main>
+  <footer>IBM Db2 TechX Summit 2026 · Interactive static checklist · No account or server database required.</footer>
+
+  <script>
+    const sections = [
+      {
+        id: "participants", title: "Participant resources & Google Forms", items: [
+          { id: "resource_bundle", title: "Send participant resource bundle", owner: "Yagnik Sharma", description: "Send one message with: PPT template + short PDF guide, approved GitHub repository and PR guide, separate concise architecture template, Db2 VS Code extension install/use guide, Dhruv Sir’s example build video if ready, and an “Additional resources” link. Send the essentials first; the example video can follow later." },
+          { id: "ppt_optional", title: "Keep PPT optional for initial submission", owner: "Yagnik Sharma", description: "Participants may use the PPT template, but do not block initial judging on a PPT. The architecture document is a separate mandatory upload." },
+          { id: "challenge_promo", title: "Promote the challenge separately", owner: "Coordinators", description: "Promote through Luma and the official website. Make it clear that general summit registration and Db2 Hack Challenge submission are different." },
+          { id: "form1_build", title: "Create Form 1 — Db2 Hack Challenge Submission", owner: "Vikas Kumar Sharma", description: "Collect name/email, GitHub profile, project title, short solution summary, repository URL, direct PR URL, extension proof, architecture-template upload, approved package/framework name, LinkedIn post URL and YouTube demo URL. PPT upload is optional." },
+          { id: "form1_declaration", title: "Add Form 1 final required declaration checkbox", owner: "Vikas Kumar Sharma", description: "Confirm: PR raised; extension installed/used and proof uploaded; at least one approved Db2 package/framework used; architecture template uploaded; LinkedIn post published; YouTube demo uploaded; and links/proofs are accurate." },
+          { id: "form2_build", title: "Create Form 2 — Extension Adoption & Goodies Giveaway", owner: "Vikas Kumar Sharma", description: "Open to everyone, including non-hackathon attendees. Collect contact details, extension installation/use proof, confirmation of use, and relevant goodies eligibility/consent details." },
+          { id: "form2_declaration", title: "Add Form 2 final required declaration checkbox", owner: "Vikas Kumar Sharma", description: "Confirm that the extension was installed, opened and used, and that the proof is genuine. Add a package-use checkbox here only if you decide to track toolkit exploration in this form." },
+          { id: "test_forms", title: "Test both forms end-to-end", owner: "Vikas + Yagnik", description: "Submit a test response from a phone. Verify required fields, upload permissions, response-sheet access, and all declarations." },
+          { id: "package_rule", title: "Require at least one approved Db2 package/framework", owner: "Yagnik + reviewers", description: "Each hackathon solution must use at least one approved Db2 package/framework. Do not require every available package." }
+        ]
+      },
+      {
+        id: "supplies", title: "Morning errands, room & supplies", items: [
+          { id: "print_cert_ids", title: "Print certificates and ID cards", owner: "Yagnik + friend", description: "Use approved designs. Verify names, roles, categories and quantities before leaving the printer." },
+          { id: "lanyard_trophy", title: "Get lanyards, three trophies and stickers", owner: "Yagnik + friend", description: "Ask for same-day custom lanyards; if they are not ready, buy white lanyards. Collect three trophies and print matching stickers." },
+          { id: "goodies", title: "Confirm goodies delivery", owner: "Yagnik Sharma", description: "Ask Sir to contact the courier, confirm same-day delivery and check the quantity when received." },
+          { id: "invite_brijesh", title: "Invite Brijesh Sir (IIC Convener) and request a room", owner: "Yagnik Sharma", description: "Request a room for volunteer/coordinator planning and briefing." },
+          { id: "attendance_dutychart", title: "Prepare attendance sheet and finish duty chart", owner: "Yagnik + coordinators", description: "Make a print-ready manual attendance sheet. Finish assignments from panel discussion through Top 10 pitches, valedictory and wrap-up." },
+          { id: "ayush_resource_list", title: "Print and hand resource checklist to Ayush", owner: "Yagnik → Ayush", description: "Walk Ayush through each item, quantity, placement location, owner and tick-off process." },
+          { id: "event_supplies", title: "Check all event supplies", owner: "Resource coordinator", description: "Confirm certificates, IDs, lanyards, trophies, stickers, markers, tape, scissors, extension boards and spare stationery." },
+          { id: "team_brief", title: "Brief stage and volunteer teams", owner: "Yagnik Sharma", description: "Confirm responsibilities for guest reception, room setup, laptop handovers, certificates, quiz QR distribution, cameras, stream and teardown." }
+        ]
+      },
+      {
+        id: "stream", title: "YouTube, OBS, microphone & camera", items: [
+          { id: "create_stream", title: "Create the YouTube stream link", owner: "Yagnik Sharma", description: "Schedule the summit stream on the Jinweis channel. Save the public viewer link separately from the private stream key." },
+          { id: "obs_scenes", title: "Build OBS scenes", owner: "Yagnik Sharma", description: "Prepare opening/holding slide, speaker camera, presentation feed, split view, break slide, quiz screen and closing/winner scene. Test scene switching and recording." },
+          { id: "mic_test", title: "Test XLR and USB-C microphone inputs", owner: "Yagnik Sharma", description: "Confirm XLR reaches the mixer and USB-C reaches OBS at the same time. Check levels, clipping, echo and backup audio." },
+          { id: "full_stream_test", title: "Run a full live-stream test", owner: "Yagnik + Samriddhi", description: "Check internet, video, audio, presentation capture, recording and stream health. Confirm guest slides display cleanly." },
+          { id: "projector_av", title: "Check projector and stage AV", owner: "Samriddhi", description: "Test guest PPTs, clicker/pointer, display mirroring, microphone handovers and transitions between speaker slides and event creatives." },
+          { id: "dslr_brief", title: "Train DSLR camera coordinator", owner: "Camera coordinator + Yagnik", description: "Explain required framing and angles. Confirm focus, exposure, battery, storage and shot handovers." },
+          { id: "hyperlapse", title: "Choose three hyperlapse tripod locations", owner: "Camera + Reel coordinators", description: "Explore three safe positions with useful event views. Ensure tripods and cables do not block movement." },
+          { id: "promotional_video", title: "Create horizontal video and vertical Reel", owner: "Reel + camera coordinators", description: "Make one 1920×1080 horizontal video for YouTube and one 1080×1920 Instagram Reel. These are organizer-team tasks, not participant deliverables." }
+        ]
+      },
+      {
+        id: "meet", title: "Virtual Meet & coordinator briefing", items: [
+          { id: "platform", title: "Confirm Teams / Zoom meeting option", owner: "Yagnik + Dhruv", description: "Ask IBM hosts about a suitable Teams meeting/webinar. Check Zoom premium as fallback. If neither is available, limit the invite to up to 100 attendees for the panel discussion only." },
+          { id: "gaurav_invite", title: "Invite Gaurav Saxena Sir to the panel", owner: "Dhruv Sir", description: "Dhruv Sir creates the meeting link and emails the invitation. Confirm Gaurav Sir’s available joining/leaving time; continue the on-site panel after he leaves if needed." },
+          { id: "brief_tushar", title: "Brief Tushar — Virtual Meet coordinator", owner: "Yagnik + Tushar", description: "Monitor chat and questions, engage remote attendees, share quiz link/code, prompt answers during technical sessions and coordinate stream issues with Yagnik." },
+          { id: "brief_samriddhi", title: "Brief Samriddhi — on-site moderator / AV", owner: "Yagnik + Samriddhi", description: "Manage speaker slides, projector, pointer/clicker, microphone arrangements, presentation handovers and stage AV cues." },
+          { id: "split_roles", title: "Confirm separate live-stream and Meet roles", owner: "Yagnik Sharma", description: "Tushar handles online engagement; Samriddhi handles on-site moderation/AV; Yagnik handles OBS/live stream. Establish a clear signal for technical failure." }
+        ]
+      },
+      {
+        id: "quiz", title: "Quiz setup", items: [
+          { id: "quiz_build", title: "Build and test Db2 + AI + general quiz", owner: "Tanishk (confirm spelling)", description: "Test LivePoll.io or another free platform with five sample questions. Verify capacity, timed scoring, speed bonus, leaderboard and projector view before choosing." },
+          { id: "quiz_qr", title: "Prepare quiz QR code and join links", owner: "Tanishk + Tushar", description: "Create a clear projector QR slide, print QR sheets for in-room participants, and prepare a short link/code for the virtual chat." },
+          { id: "quiz_slot", title: "Confirm the quiz timing", owner: "Yagnik + event lead", description: "Proposed: participants’ lunch 1:00–1:30 PM and quiz 1:30–2:00 PM while guests keep their lunch hour. Confirm with the event lead because the published agenda lists lunch until 2:00 PM." }
+        ]
+      },
+      {
+        id: "programme", title: "Anchoring, creative deck & promotion", items: [
+          { id: "anchor", title: "Finish the anchoring script", owner: "Yagnik Sharma", description: "Cover inauguration, speaker transitions, technical sessions, quiz, panel discussion, Top 10 pitches and valedictory/closing." },
+          { id: "creative_deck", title: "Finish event creative PPT", owner: "Creative coordinator", description: "Prepare the projector deck that runs behind the event and align it with the official event flow. This is separate from the participant PPT template." },
+          { id: "linkedin_promotion", title: "Publish coordinator LinkedIn promotion", owner: "All coordinators", description: "Ask coordinators to post/repost using the Luma and official website links. Keep the date, time and Db2Hack instructions consistent." }
+        ]
+      },
+      {
+        id: "followup", title: "Guests, recognition & post-event follow-ups", items: [
+          { id: "guest_logistics", title: "Confirm guest logistics", owner: "Guest coordinator", description: "Check arrival/session timing, presentation files and stage needs. Use known contacts or the supplied LinkedIn profiles; do not invent email addresses." },
+          { id: "followup_window", title: "Confirm five-day open-source contribution window", owner: "Dhruv Sir + Yagnik", description: "Clarify that hackathon results are separate from the five-day post-event contribution window. Confirm eligible repository, closing time and PR review/merge rules with IBM experts." },
+          { id: "recognition", title: "Confirm special recognition conditions with IBM", owner: "Dhruv Sir + IBM experts", description: "Explain that any IBM recognition/certificate depends on IBM review and merge/acceptance. Do not promise a certificate before IBM confirms the process." },
+          { id: "example_video", title: "Publish Dhruv Sir’s example build video when received", owner: "Yagnik / website owner", description: "Add the example project-build video to the official website and share it with participants once Dhruv Sir sends it." },
+          { id: "backup", title: "Back up all event records", owner: "Assigned coordinator", description: "Save the stream recording, photos/hyperlapses, quiz results, form responses, submission/PR links and final certificate list." },
+          { id: "group_logo", title: "Create IBM experts + organizers group logo", owner: "Design contact", description: "Ask the design contact to prepare the logo for the new group. Other event graphics are already ready." },
+          { id: "extension_demos", title: "Collect 10 Db2 extension demonstration videos", owner: "Tushar", description: "Ten coordinators record a short install/use walkthrough. Tushar collects the videos and sends them to Dhruv Sir." }
+        ]
+      }
+    ];
+
+    const quickGroups = [
+      { title: "Participant resources & forms", items: [
+        { label: "Send participant resource bundle", ids: ["resource_bundle", "ppt_optional"] },
+        { label: "Complete hackathon form + declaration", ids: ["form1_build", "form1_declaration", "package_rule"] },
+        { label: "Complete extension adoption form + declaration", ids: ["form2_build", "form2_declaration"] },
+        { label: "Test both Google Forms", ids: ["test_forms"] },
+        { label: "Promote challenge and ask coordinators to post", ids: ["challenge_promo", "linkedin_promotion"] }
+      ]},
+      { title: "Errands, room & supplies", items: [
+        { label: "Print certificates and ID cards", ids: ["print_cert_ids"] },
+        { label: "Get lanyards, 3 trophies and stickers", ids: ["lanyard_trophy"] },
+        { label: "Confirm goodies delivery", ids: ["goodies"] },
+        { label: "Invite Brijesh Sir (IIC Convener) and request room", ids: ["invite_brijesh"] },
+        { label: "Attendance sheet, duty chart and Ayush’s checklist", ids: ["attendance_dutychart", "ayush_resource_list"] },
+        { label: "Check supplies and brief volunteer team", ids: ["event_supplies", "team_brief"] }
+      ]},
+      { title: "YouTube, OBS & cameras", items: [
+        { label: "Create YouTube stream link and set up OBS scenes", ids: ["create_stream", "obs_scenes"] },
+        { label: "Test XLR + USB-C audio and full live stream", ids: ["mic_test", "full_stream_test"] },
+        { label: "Check projector and stage AV", ids: ["projector_av"] },
+        { label: "Train camera coordinator and choose 3 hyperlapse spots", ids: ["dslr_brief", "hyperlapse"] },
+        { label: "Produce horizontal video + vertical Reel", ids: ["promotional_video"] }
+      ]},
+      { title: "Meet, quiz & programme", items: [
+        { label: "Confirm Teams/Zoom and invite Gaurav Sir via Dhruv", ids: ["platform", "gaurav_invite"] },
+        { label: "Brief Tushar and Samriddhi; confirm roles", ids: ["brief_tushar", "brief_samriddhi", "split_roles"] },
+        { label: "Test quiz, QR code, join links and timing", ids: ["quiz_build", "quiz_qr", "quiz_slot"] },
+        { label: "Finish anchoring script and event creative PPT", ids: ["anchor", "creative_deck"] }
+      ]},
+      { title: "Guests & post-event follow-ups", items: [
+        { label: "Confirm guest logistics", ids: ["guest_logistics"] },
+        { label: "Confirm 5-day contribution window and IBM recognition rules", ids: ["followup_window", "recognition"] },
+        { label: "Publish example build video when received", ids: ["example_video"] },
+        { label: "Create IBM experts + organizers group logo", ids: ["group_logo"] },
+        { label: "Collect 10 Db2 extension demo videos", ids: ["extension_demos"] },
+        { label: "Back up recordings, photos, quiz and form results", ids: ["backup"] }
+      ]}
+    ];
+
+    const allTasks = sections.flatMap(section => section.items);
+    const taskMap = Object.fromEntries(allTasks.map(task => [task.id, task]));
+    const STORAGE_KEY = "ibm-db2-techx-checklist-v1";
+    let checked = loadState();
+
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch { return {}; }
+    }
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checked)); }
+      catch { /* Page still works if browser storage is disabled. */ }
+      updateProgress();
+    }
+    function setTask(id, value) {
+      checked[id] = value;
+      saveState();
+      render();
+    }
+    function isDone(id) { return checked[id] === true; }
+    function groupDone(ids) { return ids.length > 0 && ids.every(isDone); }
+    function renderQuick() {
+      const root = document.getElementById("quick-grid");
+      root.innerHTML = "";
+      quickGroups.forEach((group, groupIndex) => {
+        const card = document.createElement("section");
+        card.className = "quick-card";
+        const heading = document.createElement("h3");
+        heading.textContent = group.title;
+        card.appendChild(heading);
+        group.items.forEach((item, itemIndex) => {
+          const row = document.createElement("div");
+          row.className = "quick-item" + (groupDone(item.ids) ? " done" : "");
+          const input = document.createElement("input");
+          const id = `quick-${groupIndex}-${itemIndex}`;
+          input.type = "checkbox"; input.id = id; input.checked = groupDone(item.ids);
+          input.setAttribute("aria-label", item.label);
+          input.addEventListener("change", () => {
+            item.ids.forEach(taskId => checked[taskId] = input.checked);
+            saveState(); render();
+          });
+          const label = document.createElement("label"); label.htmlFor = id; label.textContent = item.label;
+          row.append(input, label); card.appendChild(row);
+        });
+        root.appendChild(card);
+      });
+    }
+    function renderDetails() {
+      const root = document.getElementById("detail-sections");
+      const searchTerm = document.getElementById("search").value.trim().toLowerCase();
+      root.innerHTML = "";
+      let shownTasks = 0;
+      sections.forEach((section, sectionIndex) => {
+        const matching = section.items.filter(task => {
+          const haystack = `${task.title} ${task.owner} ${task.description} ${section.title}`.toLowerCase();
+          return !searchTerm || haystack.includes(searchTerm);
+        });
+        if (!matching.length) return;
+        shownTasks += matching.length;
+        const details = document.createElement("details");
+        details.className = "detail-section";
+        details.open = Boolean(searchTerm) || sectionIndex === 0;
+        const summary = document.createElement("summary");
+        const left = document.createElement("span"); left.className = "summary-left";
+        const number = document.createElement("span"); number.className = "section-number"; number.textContent = String(sectionIndex + 1).padStart(2, "0");
+        const title = document.createElement("span"); title.textContent = section.title;
+        left.append(number, title);
+        const meta = document.createElement("span"); meta.className = "summary-meta";
+        const doneCount = section.items.filter(task => isDone(task.id)).length;
+        meta.textContent = `${doneCount}/${section.items.length} done`;
+        summary.append(left, meta);
+        details.appendChild(summary);
+        const body = document.createElement("div"); body.className = "detail-body";
+        matching.forEach(task => {
+          const row = document.createElement("article"); row.className = "task" + (isDone(task.id) ? " done" : ""); row.dataset.taskId = task.id;
+          const head = document.createElement("div"); head.className = "task-head";
+          const input = document.createElement("input"); input.type = "checkbox"; input.id = `detail-${task.id}`; input.checked = isDone(task.id); input.setAttribute("aria-label", task.title);
+          input.addEventListener("change", () => setTask(task.id, input.checked));
+          const content = document.createElement("div"); content.style.minWidth = "0";
+          const taskTitle = document.createElement("div"); taskTitle.className = "task-title";
+          const label = document.createElement("label"); label.htmlFor = input.id; label.textContent = task.title;
+          taskTitle.appendChild(label);
+          const owner = document.createElement("div"); owner.className = "owner"; owner.textContent = `Owner: ${task.owner}`;
+          const description = document.createElement("p"); description.className = "description"; description.textContent = task.description;
+          content.append(taskTitle, owner, description); head.append(input, content); row.appendChild(head); body.appendChild(row);
+        });
+        details.appendChild(body); root.appendChild(details);
+      });
+      document.getElementById("empty-state").style.display = shownTasks ? "none" : "block";
+    }
+    function updateProgress() {
+      const done = allTasks.filter(task => isDone(task.id)).length;
+      const percent = Math.round(done / allTasks.length * 100);
+      document.getElementById("progress-label").textContent = `${done} / ${allTasks.length} tasks · ${percent}%`;
+      document.getElementById("progress-fill").style.width = `${percent}%`;
+    }
+    function render() { renderQuick(); renderDetails(); updateProgress(); }
+    document.getElementById("search").addEventListener("input", renderDetails);
+    document.getElementById("expand-all").addEventListener("click", () => document.querySelectorAll(".detail-section").forEach(el => el.open = true));
+    document.getElementById("collapse-all").addEventListener("click", () => document.querySelectorAll(".detail-section").forEach(el => el.open = false));
+    document.getElementById("reset-btn").addEventListener("click", () => {
+      if (!confirm("Reset all checklist progress in this browser? This cannot be undone.")) return;
+      checked = {}; saveState(); render();
+    });
+    document.getElementById("export-btn").addEventListener("click", () => {
+      const payload = { event: "IBM Db2 TechX Summit 2026", exportedAt: new Date().toISOString(), checked };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "ibm-db2-techx-checklist-progress.json"; a.click(); URL.revokeObjectURL(url);
+    });
+    render();
+  </script>
+</body>
+</html>
