@@ -101,6 +101,10 @@
     .note { background: #fff8e7; border: 1px solid #f0dca6; color: #6e5111; border-radius: 11px; padding: 12px 14px; font-size: 14px; margin-top: 14px; }
     footer { padding: 0 0 28px; font-size: 13px; color: var(--muted); }
     .empty-state { color: var(--muted); padding: 20px; text-align: center; display: none; }
+    .site-nav { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 16px; padding: 8px; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+    .site-nav a { display: inline-flex; align-items: center; padding: 10px 14px; border-radius: 9px; color: var(--navy-2); font-weight: 800; font-size: 15px; }
+    .site-nav a.active { color: #fff; background: var(--blue); }
+    .site-nav a:not(.active):hover { background: var(--blue-soft); text-decoration: none; }
     @media (max-width: 900px) { .quick-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 620px) {
       .hero { padding: 25px 17px 22px; }
@@ -147,6 +151,10 @@
   </header>
 
   <main>
+    <nav class="site-nav no-print" aria-label="Site sections">
+      <a class="active" href="./index.html" aria-current="page">Operations Checklist</a>
+      <a href="./inventory.html">Event Inventory</a>
+    </nav>
     <div class="topbar">
       <div class="progress-card" aria-live="polite">
         <div class="progress-top"><span>Overall progress</span><span id="progress-label">0 / 43 tasks · 0%</span></div>
@@ -155,7 +163,6 @@
       <div class="actions no-print">
         <button class="btn primary" onclick="window.print()">Print quick checklist</button>
         <button class="btn" id="export-btn">Export progress</button>
-        <button class="btn" id="reset-btn">Reset checkboxes</button>
       </div>
     </div>
 
@@ -186,6 +193,8 @@
         <a href="https://github.com/KunalGolaIBM/IBM_Db2_TechX_Project_Submission/pulls" target="_blank" rel="noreferrer">GitHub PRs ↗</a>
         <a href="https://ibmdb2techxsummit.glbajajgroup.ac.in/" target="_blank" rel="noreferrer">Official event website ↗</a>
         <a href="https://livepoll.io/" target="_blank" rel="noreferrer">Quiz platform to test ↗</a>
+        <a href="./inventory.html">Event inventory checklist ↗</a>
+        <a href="./event-items-checklist.pdf" target="_blank" rel="noreferrer">Inventory checklist PDF ↗</a>
       </div>
       <div class="guest-list">
         <a href="https://www.linkedin.com/in/2mrdaya/" target="_blank" rel="noreferrer">Daya Nand — LinkedIn ↗</a>
@@ -199,7 +208,7 @@
       <div class="note"><strong>Checkbox note:</strong> Progress saves in this browser on this device. It does not automatically synchronize between different coordinators or devices.</div>
     </section>
   </main>
-  <footer>IBM Db2 TechX Summit 2026 · Interactive static checklist · No account or server database required.</footer>
+  <footer>IBM Db2 TechX Summit 2026 · Operations checklist saves locally; inventory live sync can be configured separately.</footer>
 
   <script>
     const sections = [
@@ -417,10 +426,6 @@
     document.getElementById("search").addEventListener("input", renderDetails);
     document.getElementById("expand-all").addEventListener("click", () => document.querySelectorAll(".detail-section").forEach(el => el.open = true));
     document.getElementById("collapse-all").addEventListener("click", () => document.querySelectorAll(".detail-section").forEach(el => el.open = false));
-    document.getElementById("reset-btn").addEventListener("click", () => {
-      if (!confirm("Reset all checklist progress in this browser? This cannot be undone.")) return;
-      checked = {}; saveState(); render();
-    });
     document.getElementById("export-btn").addEventListener("click", () => {
       const payload = { event: "IBM Db2 TechX Summit 2026", exportedAt: new Date().toISOString(), checked };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });

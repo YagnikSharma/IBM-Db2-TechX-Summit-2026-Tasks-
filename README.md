@@ -1,47 +1,48 @@
-# IBM Db2 TechX Summit 2026 — Interactive Checklist
+# IBM Db2 TechX Summit 2026 — Operations + Inventory Checklists
 
-A static, responsive HTML checklist for event operations. No framework, package install, server or database is required.
+This is one static website with two pages:
 
-## Features
+- `index.html` — Operations checklist
+- `inventory.html` — Event items inventory checklist
+- `event-items-checklist.pdf` — Print-ready inventory checklist PDF
+- `config.js` and `supabase-setup.sql` — optional setup for shared live inventory progress
 
-- Quick checklist at the top, with detailed tasks and owners below.
-- Checkboxes are synchronized between the quick checklist and task details.
-- Progress counter and progress bar.
-- Checkmarks persist in the same browser using `localStorage`.
-- Search, expand/collapse, reset, export progress as JSON, and print the quick checklist.
-- Event, GitHub and guest LinkedIn links included.
+## Important changes
 
-## Run locally
+- The inventory checklist is part of the same deployment. Use **Operations Checklist** and **Event Inventory** navigation tabs to switch pages.
+- All **Reset** buttons and reset handlers have been removed intentionally. There is no one-click bulk reset.
+- The certificate total is corrected to **33** (2 + 3 + 8 + 10 + 4 + 1 + 5).
+- The 36 individual inventory items are checkable; the checkbox should be ticked only after physically checking quantity and availability.
+- Both HTML pages are mobile-friendly. The inventory PDF can be downloaded from the inventory page.
 
-Open `index.html` in a modern browser. For hosting, deploy this folder as a static site.
+## Deploy the update to your existing Vercel site
 
-## Deploy on Vercel
+1. Download/extract this project ZIP.
+2. Replace the matching files at the root of your existing GitHub repository with the files from this folder. Keep the same repository connected to Vercel.
+3. Commit and push the changes to the production branch. Vercel should automatically build and deploy the update.
+4. After deployment, open the existing Vercel URL. The inventory page will be at `/inventory` (Vercel clean URLs) or `/inventory.html`.
 
-### Dashboard + GitHub
+## Configure shared live inventory progress (Supabase)
 
-1. Create a new GitHub repository and upload `index.html`, `vercel.json`, and `README.md` from this folder.
-2. Sign in at https://vercel.com and select **Add New → Project**.
-3. Import the GitHub repository.
-4. Select **Other** as the framework preset. Leave the build command blank; use `.` as the output directory if Vercel requests one.
-5. Select **Deploy**. Vercel will provide the live `.vercel.app` URL.
+The inventory page supports realtime shared checkmarks but **this is not active until configured**.
 
-Vercel's official documentation confirms that plain HTML/CSS/JS projects can skip the build step: https://vercel.com/docs/builds
+1. Create a Supabase project.
+2. In the Supabase SQL Editor, run the contents of `supabase-setup.sql`.
+3. Open `config.js` and set the Project URL and publishable/anon key:
 
-### Or deploy with Vercel CLI
+   ```js
+   window.EVENT_CHECKLIST_CONFIG = {
+     supabaseUrl: "https://YOUR_PROJECT.supabase.co",
+     supabaseAnonKey: "YOUR_PUBLIC_PUBLISHABLE_OR_ANON_KEY"
+   };
+   ```
 
-Install Node.js if it is not installed, then run from this folder:
+4. Never put a service-role or secret key in browser code. Commit the updated `config.js` and let Vercel redeploy. Confirm the page displays **Live sync connected** on every coordinator's device.
 
-```bash
-npm install -g vercel
-vercel
-```
+### Access note
 
-Follow the prompts to sign in and create a preview deployment. To publish to production after checking the preview, run:
+The included SQL policy allows anyone with the deployed URL to read and update the inventory checkmarks while shared-sync is enabled. The checklist contains no personal or secret information, but if you need to restrict write access to coordinators, configure Supabase Auth and tighter row-level security policies before sharing.
 
-```bash
-vercel --prod
-```
+## Local-only fallback
 
-## Important checkbox behaviour
-
-Progress is saved locally in each browser/device. It is **not shared or synchronized** between different coordinators. Use **Export progress** to save a JSON backup. Shared multi-user progress would need a database/backend and appropriate access control.
+If `config.js` is left blank, inventory checkmarks are stored in the browser/device only and do not sync to other coordinators.
