@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#173b60">
+  <meta name="theme-color" content="#0b1f3a">
   <meta name="description" content="Shared event inventory checklist for IBM Db2 TechX Summit 2026.">
   <title>Event Inventory | IBM Db2 TechX Summit 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,33 +13,34 @@
   <script src="./config.js"></script>
   <style>
     :root {
-      --navy: #173b60;
-      --navy-2: #214d78;
-      --blue: #2f6ea6;
-      --ink: #17212d;
-      --muted: #586777;
-      --line: #dbe3eb;
-      --paper: #f4f7fa;
+      --navy: #0b1f3a;
+      --navy-2: #123b69;
+      --blue: #1769d2;
+      --blue-soft: #eaf3ff;
+      --ink: #172b45;
+      --muted: #53657a;
+      --line: #d9e2ec;
+      --paper: #f2f6fa;
       --white: #ffffff;
-      --green: #177245;
+      --green: #16804a;
       --green-bg: #e8f6ee;
       --amber: #8d5d08;
       --amber-bg: #fff4d9;
-      --shadow: 0 8px 24px rgba(24, 49, 75, .055);
-      --radius: 14px;
+      --shadow: 0 10px 30px rgba(13, 39, 71, .07);
+      --radius: 16px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { margin: 0; background: var(--paper); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 16px; line-height: 1.5; }
     button, input { font: inherit; }
     button { cursor: pointer; }
-    .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 44px; }
-    .hero { background: linear-gradient(135deg, #173b60 0%, #245780 100%); color: #fff; border-radius: 18px; padding: 28px 30px 24px; box-shadow: var(--shadow); }
+    .page { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 24px 0 44px; }
+    .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 65%, #1769a6 100%); color: #fff; border-radius: 18px; padding: 28px 30px 24px; box-shadow: var(--shadow); }
     .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #d8e8f7; font-size: 12px; line-height: 1.4; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
     .eyebrow-dot { width: 8px; height: 8px; background: #7fd3a7; border-radius: 50%; display: inline-block; }
     h1 { font-size: clamp(28px, 4.2vw, 40px); line-height: 1.1; letter-spacing: -.035em; margin: 0 0 10px; font-weight: 800; }
     .hero p { color: #e3edf6; margin: 0; max-width: 720px; font-size: 16px; }
-    .hero-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.2); flex-wrap: wrap; }
+    .hero-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px 18px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.2); flex-wrap: wrap; }
     .sync-status { display: inline-flex; align-items: center; gap: 9px; color: #f0f6fc; font-size: 14px; font-weight: 600; }
     .sync-dot { width: 9px; height: 9px; border-radius: 50%; background: #ffd166; flex: 0 0 auto; }
     .sync-status.live .sync-dot { background: #75e0a4; box-shadow: 0 0 0 4px rgba(117,224,164,.13); }
@@ -81,24 +82,24 @@
     .verify-box { appearance: none; width: 23px; height: 23px; border: 2px solid #8b9dad; border-radius: 6px; background: white; display: inline-grid; place-items: center; margin: 0; flex: 0 0 auto; }
     .verify-box:checked { background: #208052; border-color: #208052; }
     .verify-box:checked::after { content: "✓"; color: white; font-size: 16px; font-weight: 800; line-height: 1; }
-    .verify-box:focus-visible { outline: 3px solid rgba(47,110,166,.25); outline-offset: 2px; }
+    .verify-box:focus-visible { outline: 3px solid rgba(23,105,210,.25); outline-offset: 2px; }
     .item-label { font-size: 15.5px; font-weight: 700; color: #202d3b; overflow-wrap: anywhere; }
     .is-checked .item-label { color: #466152; }
     .qty { font-size: 16px; color: #1c3854; font-weight: 800; }
-    .note { color: #586777; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
+    .note { color: var(--muted); font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
     .mobile-label { display: none; }
     .empty-state { display: none; text-align: center; padding: 28px 16px; color: var(--muted); background: #fff; border: 1px dashed #cbd6e0; border-radius: 12px; }
     .footer-note { color: #627384; text-align: center; font-size: 13px; margin: 20px auto 0; max-width: 820px; }
     .site-nav { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 16px; padding: 8px; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
     .site-nav a { display: inline-flex; align-items: center; padding: 10px 14px; border-radius: 9px; color: var(--navy-2); font-weight: 800; font-size: 15px; text-decoration: none; }
-    .site-nav a.active { color: #fff; background: var(--navy); }
-    .site-nav a:not(.active):hover { background: #e8eef4; }
+    .site-nav a.active { color: #fff; background: var(--blue); }
+    .site-nav a:not(.active):hover { background: #eaf3ff; }
     .toast { position: fixed; z-index: 20; bottom: 20px; left: 50%; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; max-width: calc(100% - 28px); padding: 11px 15px; background: #1b2938; color: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.18); font-size: 14px; font-weight: 600; transition: opacity .2s, transform .2s; }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
     .hidden { display: none !important; }
     @media (max-width: 760px) {
-      .page { width: min(100% - 22px, 600px); padding-top: 12px; }
-      .hero { padding: 22px 18px 18px; border-radius: 14px; }
+      .page { width: min(100% - 22px, 1180px); padding-top: 12px; }
+      .hero { padding: 24px 18px 20px; border-radius: 15px; }
       .stats { gap: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 12px; }
       .stat { padding: 12px 11px; border-radius: 11px; }
       .stat-label { font-size: 11px; line-height: 1.25; }
@@ -129,16 +130,16 @@
       @page { margin: 12mm; }
       body { background: white; color: #111; font-size: 11pt; }
       .page { width: 100%; padding: 0; }
-      .hero { background: white !important; color: #111 !important; border: 2px solid #173b60; box-shadow: none; padding: 15px 16px; border-radius: 0; }
+      .hero { background: white !important; color: #111 !important; border: 2px solid #0b1f3a; box-shadow: none; padding: 12px 14px; border-radius: 0; }
       .eyebrow, .hero p, .date-label, .sync-status { color: #333 !important; }
       .hero h1 { font-size: 24pt; }
       .hero-bottom { border-top: 1px solid #aaa; margin-top: 12px; padding-top: 10px; }
       .stats { margin: 10px 0; gap: 8px; }
       .stat { box-shadow: none; padding: 9px; }
       .stat-value { font-size: 20pt; }
-      .toolbar, .category-nav, .site-nav, .footer-note, .toast { display: none !important; }
+      .toolbar, .category-nav, .footer-note, .toast { display: none !important; }
       .category { box-shadow: none; break-inside: avoid; margin-bottom: 10px; }
-      .category-head { background: #173b60 !important; color: white !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .category-head { background: #0b1f3a !important; color: white !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
       .item-row { min-height: 37px; padding: 5px 10px; }
       .verify-box { width: 17px; height: 17px; border-color: #333; }
       .item-label { font-size: 10pt; }
@@ -150,7 +151,7 @@
 </head>
 <body>
   <main class="page">
-    <nav class="site-nav no-print" aria-label="Site sections">
+    <nav class="site-nav" aria-label="Site sections">
       <a href="./index.html">Operations Checklist</a>
       <a class="active" href="./inventory.html" aria-current="page">Event Inventory</a>
     </nav>
@@ -183,7 +184,7 @@
     <nav class="category-nav" id="categoryNav" aria-label="Jump to category"></nav>
     <div id="categories"></div>
     <div id="emptyState" class="empty-state">No items match your search.</div>
-    <p class="footer-note">Certificate quantities total <strong>33</strong>. Live shared checkmarks require Supabase configuration; until the status says “Live sync connected”, progress is saved only in this browser. Reset controls are intentionally omitted.</p>
+    <p class="footer-note">Certificate total: <strong>33</strong>. Tick each item only after physically verifying its quantity and availability.</p>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -251,6 +252,7 @@
       let state = loadLocalState();
       let supabaseClient = null;
       let syncMode = "local";
+      let sharedReady = false;
       let currentFilter = "all";
       let toastTimer = null;
 
@@ -399,11 +401,14 @@
         state[id] = Boolean(value);
         saveLocalState();
         render();
-        if (syncMode === "live" && supabaseClient) {
+        if (sharedReady && supabaseClient) {
           const { error } = await supabaseClient.from(TABLE).upsert({ item_id: id, checked: Boolean(value), updated_at: new Date().toISOString() }, { onConflict: "item_id" });
           if (error) {
-            setSyncStatus("error", "Live sync error — check database settings");
+            console.error("Could not save inventory progress:", error);
+            setSyncStatus("error", "Live sync error — changes may not be shared");
             showToast("Saved on this device, but shared sync failed.");
+          } else if (syncMode === "error" && sharedReady) {
+            setSyncStatus("live", "Live sync connected — shared across coordinators");
           }
         }
       }
@@ -427,9 +432,21 @@
         try {
           supabaseClient = window.supabase.createClient(url, key);
           setSyncStatus("local", "Connecting to shared checklist…");
-          const seed = allItems.map(item => ({ item_id: item.id, checked: false }));
-          const seeded = await supabaseClient.from(TABLE).upsert(seed, { onConflict: "item_id", ignoreDuplicates: true });
-          if (seeded.error) throw seeded.error;
+          const firstRead = await supabaseClient.from(TABLE).select("item_id, checked");
+          if (firstRead.error) throw firstRead.error;
+          const existing = firstRead.data || [];
+          const existingIds = new Set(existing.map(row => row.item_id));
+          let seed;
+          if (existing.length === 0) {
+            // First setup: preserve local inventory checks when initializing the shared database.
+            seed = allItems.map(item => ({ item_id: item.id, checked: state[item.id] === true }));
+          } else {
+            seed = allItems.filter(item => !existingIds.has(item.id)).map(item => ({ item_id: item.id, checked: false }));
+          }
+          if (seed.length) {
+            const seeded = await supabaseClient.from(TABLE).upsert(seed, { onConflict: "item_id", ignoreDuplicates: true });
+            if (seeded.error) throw seeded.error;
+          }
           const { data, error } = await supabaseClient.from(TABLE).select("item_id, checked");
           if (error) throw error;
           applyDatabaseRows(data || []);
@@ -443,8 +460,8 @@
               }
             })
             .subscribe(status => {
-              if (status === "SUBSCRIBED") setSyncStatus("live", "Live sync connected — shared across coordinators");
-              else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") setSyncStatus("error", "Live sync disconnected — changes may not sync");
+              if (status === "SUBSCRIBED") { sharedReady = true; setSyncStatus("live", "Live sync connected — shared across coordinators"); }
+              else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") { sharedReady = false; setSyncStatus("error", "Live sync disconnected — changes may not sync"); }
             });
           window.addEventListener("beforeunload", () => { try { supabaseClient.removeChannel(channel); } catch (_) {} }, { once: true });
         } catch (error) {

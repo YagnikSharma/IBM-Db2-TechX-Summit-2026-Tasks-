@@ -6,6 +6,11 @@
   <meta name="theme-color" content="#0b1f3a" />
   <meta name="description" content="Interactive operations checklist for IBM Db2 TechX Summit 2026." />
   <title>IBM Db2 TechX Summit 2026 — Operations Checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./config.js"></script>
   <style>
     :root {
       --navy: #0b1f3a;
@@ -33,19 +38,29 @@
     button, input { font: inherit; }
     button { cursor: pointer; }
     .hero {
-      background: linear-gradient(120deg, var(--navy) 0%, #10345e 60%, #1769a6 100%);
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 65%, #1769a6 100%);
       color: white;
-      padding: 32px 22px 27px;
+      padding: 28px 30px 24px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
     }
-    .hero-inner, main, footer { width: min(1180px, calc(100% - 32px)); margin-inline: auto; }
+    .hero-inner { width: 100%; margin: 0; }
+    main, footer { width: min(1180px, calc(100% - 32px)); margin-inline: auto; }
     .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-weight: 800; font-size: 12px; color: #b9d7f7; }
     h1 { font-size: clamp(27px, 4vw, 40px); line-height: 1.12; margin: 8px 0 10px; letter-spacing: -.035em; }
     .subhead { margin: 0; color: #e3edf8; font-size: 16px; }
+    .hero-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px 18px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.2); flex-wrap: wrap; }
     .deadline {
-      display: inline-flex; align-items: center; gap: 9px; margin-top: 18px;
+      display: inline-flex; align-items: center; gap: 9px;
       border: 1px solid rgba(255,255,255,.26); background: rgba(255,255,255,.09);
       border-radius: 999px; padding: 8px 13px; font-weight: 700; font-size: 14px;
     }
+    .sync-status { display: inline-flex; align-items: center; gap: 9px; color: #f0f6fc; font-size: 14px; font-weight: 650; }
+    .sync-dot { width: 9px; height: 9px; border-radius: 50%; background: #ffd166; flex: 0 0 auto; }
+    .sync-status.live .sync-dot { background: #75e0a4; box-shadow: 0 0 0 4px rgba(117,224,164,.13); }
+    .sync-status.error .sync-dot { background: #ff9a9a; }
+    .sync-status.local .sync-dot { background: #ffd166; }
     main { padding: 24px 0 44px; }
     .topbar { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
     .progress-card, .panel, .quick-card, .detail-section, .resources-card {
@@ -107,8 +122,10 @@
     .site-nav a:not(.active):hover { background: var(--blue-soft); text-decoration: none; }
     @media (max-width: 900px) { .quick-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 620px) {
-      .hero { padding: 25px 17px 22px; }
-      .hero-inner, main, footer { width: min(100% - 22px, 1180px); }
+      .hero { padding: 24px 18px 20px; border-radius: 15px; }
+      main, footer { width: min(100% - 22px, 1180px); }
+      .hero-inner { width: 100%; }
+      .hero-bottom { align-items: flex-start; }
       .quick-grid { grid-template-columns: 1fr; }
       .topbar { align-items: stretch; }
       .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -121,9 +138,9 @@
     @media print {
       @page { size: A4; margin: 9mm; }
       body { background: white; font-size: 10pt; color: #111; }
-      .hero { padding: 0 0 8px; color: #111; background: white; border-bottom: 2px solid #173b63; }
+      .hero { padding: 12px 14px; color: #111; background: white; border: 2px solid #173b63; border-radius: 0; box-shadow: none; margin-bottom: 10px; }
       .hero-inner, main, footer { width: 100%; }
-      .eyebrow, .subhead { color: #333; }
+      .eyebrow, .subhead, .sync-status { color: #333; }
       h1 { color: #111; font-size: 20pt; margin: 4px 0; }
       .deadline { color: #111; background: white; border: 1px solid #777; margin-top: 6px; font-size: 9pt; }
       .topbar, .section-heading, #detail-area, #resources-area, footer, .no-print { display: none !important; }
@@ -141,20 +158,24 @@
   </style>
 </head>
 <body>
+
+
+  <main>
+    <nav class="site-nav" aria-label="Site sections">
+      <a class="active" href="./index.html" aria-current="page">Operations Checklist</a>
+      <a href="./inventory.html">Event Inventory</a>
+    </nav>
   <header class="hero">
     <div class="hero-inner">
       <div class="eyebrow">Operations checklist</div>
       <h1>IBM Db2 TechX Summit 2026</h1>
       <p class="subhead">A practical checklist for the summit and Db2 Hack Challenge team.</p>
-      <div class="deadline">⚑ Public hackathon deadline: 29 October, 7:00 PM IST — unchanged unless an extension is approved</div>
+      <div class="hero-bottom">
+        <div class="deadline">⚑ Public hackathon deadline: 29 October, 7:00 PM IST — unchanged unless an extension is approved</div>
+        <div id="syncStatus" class="sync-status local" role="status" aria-live="polite"><span class="sync-dot"></span><span id="syncText">Checking shared sync…</span></div>
+      </div>
     </div>
   </header>
-
-  <main>
-    <nav class="site-nav no-print" aria-label="Site sections">
-      <a class="active" href="./index.html" aria-current="page">Operations Checklist</a>
-      <a href="./inventory.html">Event Inventory</a>
-    </nav>
     <div class="topbar">
       <div class="progress-card" aria-live="polite">
         <div class="progress-top"><span>Overall progress</span><span id="progress-label">0 / 43 tasks · 0%</span></div>
@@ -205,10 +226,10 @@
         <a href="https://www.linkedin.com/in/gaurav-saxena-95044594/" target="_blank" rel="noreferrer">Gaurav Saxena — LinkedIn ↗</a>
         <a href="https://www.linkedin.com/in/shaik-sadiq-068a39242/" target="_blank" rel="noreferrer">Shaik Sadiq — LinkedIn ↗</a>
       </div>
-      <div class="note"><strong>Checkbox note:</strong> Progress saves in this browser on this device. It does not automatically synchronize between different coordinators or devices.</div>
+      <div class="note"><strong>Shared progress:</strong> The status indicator at the top shows whether this checklist is syncing with the shared database. If it says Local mode, progress is saved only in this browser.</div>
     </section>
   </main>
-  <footer>IBM Db2 TechX Summit 2026 · Operations checklist saves locally; inventory live sync can be configured separately.</footer>
+  <footer>IBM Db2 TechX Summit 2026 · Operations and inventory checklists · Shared progress uses Supabase when configured.</footer>
 
   <script>
     const sections = [
@@ -327,7 +348,12 @@
     const allTasks = sections.flatMap(section => section.items);
     const taskMap = Object.fromEntries(allTasks.map(task => [task.id, task]));
     const STORAGE_KEY = "ibm-db2-techx-checklist-v1";
+    const TABLE = "event_tasks";
     let checked = loadState();
+    let supabaseClient = null;
+    let syncMode = "local";
+    let sharedReady = false;
+    let syncChannel = null;
 
     function loadState() {
       try {
@@ -335,16 +361,36 @@
         return parsed && typeof parsed === "object" ? parsed : {};
       } catch { return {}; }
     }
-    function saveState() {
+    function saveLocalState() {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checked)); }
-      catch { /* Page still works if browser storage is disabled. */ }
+      catch { /* Shared database can still work if browser storage is disabled. */ }
       updateProgress();
     }
-    function setTask(id, value) {
-      checked[id] = value;
-      saveState();
-      render();
+    function setSyncStatus(mode, message) {
+      syncMode = mode;
+      const el = document.getElementById("syncStatus");
+      if (!el) return;
+      el.className = "sync-status " + mode;
+      document.getElementById("syncText").textContent = message;
     }
+    async function pushTaskRows(rows) {
+      if (!sharedReady || !supabaseClient || !rows.length) return;
+      const payload = rows.map(row => ({ ...row, updated_at: new Date().toISOString() }));
+      const { error } = await supabaseClient.from(TABLE).upsert(payload, { onConflict: "task_id" });
+      if (error) {
+        console.error("Could not save task progress:", error);
+        setSyncStatus("error", "Live sync error — changes may not be shared");
+      } else if (syncMode === "error" && sharedReady) {
+        setSyncStatus("live", "Live sync connected — shared across coordinators");
+      }
+    }
+    function setTasks(ids, value) {
+      ids.forEach(id => { checked[id] = Boolean(value); });
+      saveLocalState();
+      render();
+      void pushTaskRows(ids.map(id => ({ task_id: id, checked: Boolean(value) })));
+    }
+    function setTask(id, value) { setTasks([id], value); }
     function isDone(id) { return checked[id] === true; }
     function groupDone(ids) { return ids.length > 0 && ids.every(isDone); }
     function renderQuick() {
@@ -363,10 +409,7 @@
           const id = `quick-${groupIndex}-${itemIndex}`;
           input.type = "checkbox"; input.id = id; input.checked = groupDone(item.ids);
           input.setAttribute("aria-label", item.label);
-          input.addEventListener("change", () => {
-            item.ids.forEach(taskId => checked[taskId] = input.checked);
-            saveState(); render();
-          });
+          input.addEventListener("change", () => setTasks(item.ids, input.checked));
           const label = document.createElement("label"); label.htmlFor = id; label.textContent = item.label;
           row.append(input, label); card.appendChild(row);
         });
@@ -431,7 +474,62 @@
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "ibm-db2-techx-checklist-progress.json"; a.click(); URL.revokeObjectURL(url);
     });
+    async function initializeSharedSync() {
+      const config = window.EVENT_CHECKLIST_CONFIG || {};
+      const url = (config.supabaseUrl || "").trim();
+      const key = (config.supabaseAnonKey || "").trim();
+      if (!url || !key) {
+        setSyncStatus("local", "Local mode — shared sync not configured");
+        return;
+      }
+      if (!window.supabase || typeof window.supabase.createClient !== "function") {
+        setSyncStatus("error", "Could not load the shared sync service");
+        return;
+      }
+      try {
+        supabaseClient = window.supabase.createClient(url, key);
+        setSyncStatus("local", "Connecting to shared checklist…");
+        const firstRead = await supabaseClient.from(TABLE).select("task_id, checked");
+        if (firstRead.error) throw firstRead.error;
+        const existing = firstRead.data || [];
+        const existingIds = new Set(existing.map(row => row.task_id));
+        let seedRows;
+        if (existing.length === 0) {
+          // First setup: preserve this browser's existing progress when seeding the shared database.
+          seedRows = allTasks.map(task => ({ task_id: task.id, checked: checked[task.id] === true }));
+        } else {
+          seedRows = allTasks.filter(task => !existingIds.has(task.id)).map(task => ({ task_id: task.id, checked: false }));
+        }
+        if (seedRows.length) {
+          const seeded = await supabaseClient.from(TABLE).upsert(seedRows, { onConflict: "task_id", ignoreDuplicates: true });
+          if (seeded.error) throw seeded.error;
+        }
+        const { data, error } = await supabaseClient.from(TABLE).select("task_id, checked");
+        if (error) throw error;
+        (data || []).forEach(row => { if (taskMap[row.task_id]) checked[row.task_id] = Boolean(row.checked); });
+        saveLocalState();
+        render();
+        syncChannel = supabaseClient.channel("event-operations-live-sync")
+          .on("postgres_changes", { event: "*", schema: "public", table: TABLE }, payload => {
+            const row = payload.new || payload.old;
+            if (row && taskMap[row.task_id] && payload.eventType !== "DELETE") {
+              checked[row.task_id] = Boolean(row.checked);
+              saveLocalState();
+              render();
+            }
+          })
+          .subscribe(status => {
+            if (status === "SUBSCRIBED") { sharedReady = true; setSyncStatus("live", "Live sync connected — shared across coordinators"); }
+            else if (["CHANNEL_ERROR", "TIMED_OUT", "CLOSED"].includes(status)) { sharedReady = false; setSyncStatus("error", "Live sync disconnected — changes may not sync"); }
+          });
+        window.addEventListener("beforeunload", () => { try { if (syncChannel && supabaseClient) supabaseClient.removeChannel(syncChannel); } catch (_) {} }, { once: true });
+      } catch (error) {
+        console.error("Operations checklist shared sync setup failed:", error);
+        setSyncStatus("error", "Sync setup incomplete — using local mode");
+      }
+    }
     render();
+    initializeSharedSync();
   </script>
 </body>
 </html>
